@@ -28,7 +28,8 @@ module.exports = gql`
         mood: Int!
         note: String
         postedBy: User
-        created: Date
+        createdAt: Date
+        updatedAt: Date
     }
 
     scalar Date

@@ -1,22 +1,23 @@
 const { Schema, model } = require('mongoose');
 
-const userSchema = new Schema({
-    mood: {
-        type: Number,
-        required: true,
+const logSchema = new Schema(
+    {
+        mood: {
+            type: Number,
+            required: true,
+        },
+        note: {
+            type: String,
+            required: false,
+        },
+        creator: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+        },
     },
-    note: {
-        type: String,
-        required: false,
+    {
+        timestamps: true,
     },
-    created: {
-        type: Date,
-        required: false,
-    },
-    creator: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-    },
-});
+);
 
-module.exports = model('Log', userSchema);
+module.exports = model('Log', logSchema);
