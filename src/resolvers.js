@@ -21,11 +21,12 @@ module.exports = {
         },
     },
     Mutation: {
+        // TODO: Check this works with UserInput
         createUser: (root, { name, email, password }) => {
             const user = new User({
-                email: email,
-                password: password,
-                name: name,
+                email,
+                password,
+                name,
             });
 
             return user

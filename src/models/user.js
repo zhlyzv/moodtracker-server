@@ -13,6 +13,12 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    createdLogs: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Log',
+        },
+    ],
 });
 
-module.exports = model('Event', userSchema);
+module.exports = model('User', userSchema);
