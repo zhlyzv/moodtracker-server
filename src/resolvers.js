@@ -21,8 +21,7 @@ module.exports = {
         },
     },
     Mutation: {
-        // TODO: Check this works with UserInput
-        createUser: (root, { name, email, password }) => {
+        createUser: (root, { UserInput: { email, password, name } }) => {
             const user = new User({
                 email,
                 password,

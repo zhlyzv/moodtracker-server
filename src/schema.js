@@ -10,7 +10,7 @@ module.exports = gql`
         createUser(UserInput: UserInput): User
     }
 
-    type UserInput {
+    input UserInput {
         name: String!
         email: String!
         password: String!
