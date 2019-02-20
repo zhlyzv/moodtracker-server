@@ -8,6 +8,15 @@ module.exports = gql`
 
     type Mutation {
         createUser(UserInput: UserInput): User
+        createEntry(EntryInput: EntryInput): Entry
+    }
+
+    type User {
+        _id: ID!
+        name: String!
+        email: String!
+        password: String
+        entries: [Entry!]
     }
 
     input UserInput {
@@ -16,20 +25,18 @@ module.exports = gql`
         password: String!
     }
 
-    type User {
+    type Entry {
         _id: ID!
-        name: String!
-        email: String!
-        password: String
-        entries: [Log!]
-    }
-
-    type Log {
         mood: Int!
         note: String
         postedBy: User
         createdAt: Date
         updatedAt: Date
+    }
+
+    input EntryInput {
+        mood: Int!
+        note: String
     }
 
     scalar Date

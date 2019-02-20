@@ -24,9 +24,9 @@ mongoose
                 console.log(`🚀 Server running at ${url}`);
             })
             .catch(err => {
-                throw new Error('Failed to start Apollo Server 😱', err);
+                throw Error('Failed to start Apollo Server 😱', err);
             });
     })
     .catch(err => {
-        throw new Error('Failed to connect to MongoDB! 😱', err);
+        throw Error('Failed to connect to MongoDB! 😱', err);
     });

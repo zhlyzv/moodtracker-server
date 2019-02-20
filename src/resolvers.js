@@ -1,6 +1,8 @@
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
 const User = require('./models/user');
+const Entry = require('./models/entry');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
     Query: {
@@ -16,19 +18,46 @@ module.exports = {
                     }),
                 )
                 .catch(err => {
-                    throw new Error('Failed to fetch users!', err);
+                    throw err;
                 });
         },
     },
     Mutation: {
         createUser: (root, { UserInput: { email, password, name } }) => {
-            const user = new User({
-                email,
-                password,
-                name,
+            return User.findOne({ email })
+                .then(user => {
+                    if (user) {
+                        throw Error('User already exists.');
+                    }
+                    return bcrypt.hash(password, 12);
+                })
+                .then(hashedPassword => {
+                    const user = new User({
+                        email,
+                        password: hashedPassword,
+                        name,
+                    });
+                    return user.save();
+                })
+                .then(result => {
+                    return {
+                        ...result._doc,
+                        _id: result.id,
+                        // we don't want to be able to retrieve passwords
+                        password: null,
+                    };
+                })
+                .catch(err => {
+                    throw err;
+                });
+        },
+        createEntry: (root, { EntryInput: { mood, note } }) => {
+            const entry = new Entry({
+                mood,
+                note,
             });
 
-            return user
+            return entry
                 .save()
                 .then(result => {
                     return {
@@ -37,7 +66,7 @@ module.exports = {
                     };
                 })
                 .catch(err => {
-                    throw new Error('Failed to save user!', err);
+                    throw err;
                 });
         },
     },
