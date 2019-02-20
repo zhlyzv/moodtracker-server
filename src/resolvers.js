@@ -21,6 +21,21 @@ module.exports = {
                     throw err;
                 });
         },
+        entries: () => {
+            return Entry.find()
+                .populate('addedBy')
+                .then(result =>
+                    result.map(entry => {
+                        return {
+                            ...entry._doc,
+                            _id: entry.id,
+                        };
+                    }),
+                )
+                .catch(err => {
+                    throw err;
+                });
+        },
     },
     Mutation: {
         createUser: (root, { UserInput: { email, password, name } }) => {
@@ -52,31 +67,31 @@ module.exports = {
                 });
         },
         createEntry: (root, { EntryInput: { mood, note } }) => {
-            let createdEntry;
+            let newEntry;
             const entry = new Entry({
                 mood,
                 note,
-                creator: '5c6dc78e9b60d007db33d05b',
+                addedBy: '5c6dcf5bdd89210a6d1fa4c8',
             });
 
             return entry
                 .save()
                 .then(result => {
-                    createdEntry = {
+                    newEntry = {
                         ...result._doc,
                         _id: result.id,
                     };
-                    return User.findById('5c6dc78e9b60d007db33d05b');
+                    return User.findById('5c6dcf5bdd89210a6d1fa4c8');
                 })
                 .then(user => {
                     if (!user) {
                         throw Error('User does not exist');
                     }
-                    user.createdEntries.push(entry);
+                    user.entries.push(entry);
                     return user.save();
                 })
                 .then(result => {
-                    return createdEntry;
+                    return newEntry;
                 })
                 .catch(err => {
                     throw err;

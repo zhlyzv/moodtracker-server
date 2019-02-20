@@ -10,7 +10,7 @@ const entrySchema = new Schema(
             type: String,
             required: false,
         },
-        creator: {
+        addedBy: {
             type: Schema.Types.ObjectId,
             ref: 'User',
         },

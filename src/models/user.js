@@ -13,7 +13,7 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    createdEntries: [
+    entries: [
         {
             type: Schema.Types.ObjectId,
             ref: 'Entry',
