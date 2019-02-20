@@ -13,10 +13,10 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
-    createdLogs: [
+    createdEntries: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Log',
+            ref: 'Entry',
         },
     ],
 });

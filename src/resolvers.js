@@ -52,18 +52,31 @@ module.exports = {
                 });
         },
         createEntry: (root, { EntryInput: { mood, note } }) => {
+            let createdEntry;
             const entry = new Entry({
                 mood,
                 note,
+                creator: '5c6dc78e9b60d007db33d05b',
             });
 
             return entry
                 .save()
                 .then(result => {
-                    return {
+                    createdEntry = {
                         ...result._doc,
                         _id: result.id,
                     };
+                    return User.findById('5c6dc78e9b60d007db33d05b');
+                })
+                .then(user => {
+                    if (!user) {
+                        throw Error('User does not exist');
+                    }
+                    user.createdEntries.push(entry);
+                    return user.save();
+                })
+                .then(result => {
+                    return createdEntry;
                 })
                 .catch(err => {
                     throw err;
