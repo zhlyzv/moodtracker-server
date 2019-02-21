@@ -10,23 +10,19 @@ const server = new ApolloServer({
     // TODO: Consider adding authentication https://www.apollographql.com/docs/apollo-server/v2/features/authentication.html#context
 });
 
-mongoose
-    .connect(
-        `mongodb+srv://${process.env.MONGO_USER}:${
-            process.env.MONGO_PASSWORD
-        }@cluster0-g7ofj.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`,
-        { useNewUrlParser: true, dbName: process.env.MONGO_DB },
-    )
-    .then(() => {
-        server
-            .listen()
-            .then(({ url }) => {
-                console.log(`🚀 Server running at ${url}`);
-            })
-            .catch(err => {
-                throw Error('Failed to start Apollo Server 😱', err);
-            });
-    })
-    .catch(err => {
-        throw Error('Failed to connect to MongoDB! 😱', err);
-    });
+const start = async () => {
+    try {
+        await mongoose.connect(
+            `mongodb+srv://${process.env.MONGO_USER}:${
+                process.env.MONGO_PASSWORD
+            }@cluster0-g7ofj.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`,
+            { useNewUrlParser: true, dbName: process.env.MONGO_DB },
+        );
+        await server.listen({ port: process.env.PORT });
+        console.log(`Server running at http://localhost:${process.env.PORT}`);
+    } catch (err) {
+        throw Error('Failed to start server 😱', err);
+    }
+};
+
+start();
