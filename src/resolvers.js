@@ -1,15 +1,18 @@
-const { GraphQLScalarType } = require('graphql');
-const { Kind } = require('graphql/language');
 const bcrypt = require('bcryptjs');
 const User = require('./models/user');
 const Entry = require('./models/entry');
+const scalars = require('./scalars');
+
+const transformData = data => ({
+    ...data._doc,
+    _id: data.id,
+});
 
 const populateUser = async userId => {
     try {
         const user = await User.findById(userId);
         return {
-            ...user._doc,
-            _id: user.id,
+            ...transformData(user),
             // eslint-disable-next-line
             entries: populateEntries.bind(this, user._doc.entries),
         };
@@ -22,8 +25,7 @@ const populateEntries = async ids => {
     try {
         const entries = await Entry.find({ _id: { $in: ids } });
         return entries.map(entry => ({
-            ...entry._doc,
-            _id: entry.id,
+            ...transformData(entry),
             addedBy: populateUser.bind(this, entry.addedBy),
         }));
     } catch (err) {
@@ -37,8 +39,7 @@ module.exports = {
             try {
                 const result = await User.find();
                 return result.map(user => ({
-                    ...user._doc,
-                    _id: user.id,
+                    ...transformData(user),
                     entries: populateEntries.bind(this, user._doc.entries),
                 }));
             } catch (err) {
@@ -49,8 +50,7 @@ module.exports = {
             try {
                 const result = await Entry.find();
                 return result.map(entry => ({
-                    ...entry._doc,
-                    _id: entry.id,
+                    ...transformData(entry),
                     addedBy: populateUser.bind(this, entry._doc.addedBy),
                 }));
             } catch (err) {
@@ -73,8 +73,7 @@ module.exports = {
                 const result = await user.save();
 
                 return {
-                    ...result._doc,
-                    _id: result.id,
+                    ...transformData(result),
                     // we don't want to be able to retrieve passwords
                     password: null,
                 };
@@ -91,10 +90,7 @@ module.exports = {
             });
             try {
                 const result = await entry.save();
-                newEntry = {
-                    ...result._doc,
-                    _id: result.id,
-                };
+                newEntry = transformData(result);
                 const user = await User.findById('5c6dcf5bdd89210a6d1fa4c8');
                 if (!user) {
                     throw Error('User does not exist.');
@@ -107,23 +103,5 @@ module.exports = {
             }
         },
     },
-    Date: new GraphQLScalarType({
-        name: 'Date',
-        description: 'Date custom scalar type ⏲',
-        parseValue(value) {
-            // value from the client
-            return new Date(value);
-        },
-        serialize(value) {
-            // value sent to the client
-            return value.getTime();
-        },
-        parseLiteral(ast) {
-            if (ast.kind === Kind.INT) {
-                // ast value is always in string format
-                return new Date(ast.value);
-            }
-            return null;
-        },
-    }),
+    ...scalars,
 };
