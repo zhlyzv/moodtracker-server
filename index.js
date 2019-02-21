@@ -1,7 +1,7 @@
 const { ApolloServer } = require('apollo-server');
+const mongoose = require('mongoose');
 const typeDefs = require('./src/schema');
 const resolvers = require('./src/resolvers');
-const mongoose = require('mongoose');
 
 const server = new ApolloServer({
     typeDefs,
@@ -19,7 +19,8 @@ const start = async () => {
             { useNewUrlParser: true, dbName: process.env.MONGO_DB },
         );
         await server.listen({ port: process.env.PORT });
-        console.log(`Server running at http://localhost:${process.env.PORT}`);
+        // eslint-disable-next-line
+        console.log(`🚀 Server running at http://localhost:${process.env.PORT}`);
     } catch (err) {
         throw Error('Failed to start server 😱', err);
     }

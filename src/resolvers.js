@@ -1,8 +1,8 @@
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
+const bcrypt = require('bcryptjs');
 const User = require('./models/user');
 const Entry = require('./models/entry');
-const bcrypt = require('bcryptjs');
 
 const populateUser = async userId => {
     try {
@@ -10,6 +10,7 @@ const populateUser = async userId => {
         return {
             ...user._doc,
             _id: user.id,
+            // eslint-disable-next-line
             entries: populateEntries.bind(this, user._doc.entries),
         };
     } catch (err) {
@@ -20,13 +21,11 @@ const populateUser = async userId => {
 const populateEntries = async ids => {
     try {
         const entries = await Entry.find({ _id: { $in: ids } });
-        return entries.map(entry => {
-            return {
-                ...entry._doc,
-                _id: entry.id,
-                addedBy: populateUser.bind(this, entry.addedBy),
-            };
-        });
+        return entries.map(entry => ({
+            ...entry._doc,
+            _id: entry.id,
+            addedBy: populateUser.bind(this, entry.addedBy),
+        }));
     } catch (err) {
         throw err;
     }
@@ -34,17 +33,14 @@ const populateEntries = async ids => {
 
 module.exports = {
     Query: {
-        user: (root, { id }) => users[id],
         users: async () => {
             try {
                 const result = await User.find();
-                return result.map(user => {
-                    return {
-                        ...user._doc,
-                        _id: user.id,
-                        entries: populateEntries.bind(this, user._doc.entries),
-                    };
-                });
+                return result.map(user => ({
+                    ...user._doc,
+                    _id: user.id,
+                    entries: populateEntries.bind(this, user._doc.entries),
+                }));
             } catch (err) {
                 throw err;
             }
@@ -52,13 +48,11 @@ module.exports = {
         entries: async () => {
             try {
                 const result = await Entry.find();
-                return result.map(entry => {
-                    return {
-                        ...entry._doc,
-                        _id: entry.id,
-                        addedBy: populateUser.bind(this, entry._doc.addedBy),
-                    };
-                });
+                return result.map(entry => ({
+                    ...entry._doc,
+                    _id: entry.id,
+                    addedBy: populateUser.bind(this, entry._doc.addedBy),
+                }));
             } catch (err) {
                 throw err;
             }
