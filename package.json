@@ -2,9 +2,9 @@
   "name": "moodtracker-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "nodemon -r dotenv/config index.js"
+    "start": "nodemon -r dotenv/config src/index.js"
   },
   "keywords": [],
   "author": "",
@@ -14,12 +14,12 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^6.2.0",
     "graphql": "^14.1.1",
-    "mongoose": "^5.4.13"
+    "mongoose": "^5.4.13",
+    "nodemon": "^1.18.10"
   },
   "devDependencies": {
     "eslint": "^5.14.1",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "nodemon": "^1.18.10"
+    "eslint-plugin-import": "^2.16.0"
   }
 }

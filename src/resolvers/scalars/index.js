@@ -1,3 +1,7 @@
+/**
+ * Main entry for custom scalar types.
+ * Consider splitting out into separate files per scalar if file grows bigger.
+ */
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
 
