@@ -4,7 +4,6 @@ const { transformData } = require('../util');
 
 module.exports = {
     createUser: async (root, { UserInput: { email, password, name } }) => {
-        console.log('createuser');
         try {
             if (await User.findOne({ email })) {
                 throw Error('User already exists.');

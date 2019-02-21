@@ -2,10 +2,12 @@ const { ApolloServer } = require('apollo-server');
 const mongoose = require('mongoose');
 const typeDefs = require('./schema');
 const resolvers = require('./resolvers/index');
+const context = require('./context');
 
 const server = new ApolloServer({
     typeDefs,
     resolvers,
+    context,
     cors: true,
     // TODO: Consider adding authentication https://www.apollographql.com/docs/apollo-server/v2/features/authentication.html#context
 });

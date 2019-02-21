@@ -5,6 +5,13 @@ module.exports = gql`
         user(id: ID!): User
         users: [User!]
         entries: [Entry!]
+        login(email: String!, password: String!): AuthPayload
+    }
+
+    type AuthPayload {
+        userId: ID!
+        token: String!
+        tokenExpiration: Int!
     }
 
     type Mutation {

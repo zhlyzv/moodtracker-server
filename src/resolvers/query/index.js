@@ -4,10 +4,12 @@
  */
 const entries = require('./entries');
 const users = require('./users');
+const login = require('./login');
 
 module.exports = {
     Query: {
         ...entries,
         ...users,
+        ...login,
     },
 };
