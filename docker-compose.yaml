@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  api:
+    build: .
+    volumes:
+      - .:/usr/src/api
+      - /usr/src/api/node_modules
+    ports:
+      - 4000:4000
+      # TODO: Consider exposing port 9229 and running start command with --inspect=0.0.0.0 flag in order to enable debugging
+      # - 9229:9229
+    command: npm start
