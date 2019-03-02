@@ -9,16 +9,15 @@ const server = new ApolloServer({
     resolvers,
     context,
     cors: true,
-    // TODO: Consider adding authentication https://www.apollographql.com/docs/apollo-server/v2/features/authentication.html#context
 });
 
 const start = async () => {
     try {
         await mongoose.connect(
-            `mongodb+srv://${process.env.MONGO_USER}:${
-                process.env.MONGO_PASSWORD
-            }@cluster0-g7ofj.mongodb.net/${process.env.MONGO_DB}?retryWrites=true`,
-            { useNewUrlParser: true, dbName: process.env.MONGO_DB },
+            `mongodb+srv://${process.env.MONGO_INITDB_ROOT_USERNAME}:${
+                process.env.MONGO_INITDB_ROOT_PASSWORD
+            }@cluster0-g7ofj.mongodb.net/${process.env.MONGO_INITDB_DATABASE}?retryWrites=true`,
+            { useNewUrlParser: true, dbName: process.env.MONGO_INITDB_DATABASE },
         );
         await server.listen({ port: process.env.PORT });
         // eslint-disable-next-line

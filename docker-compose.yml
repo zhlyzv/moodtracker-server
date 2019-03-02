@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  api:
+    build: .
+    volumes:
+      - .:/usr/src/api
+      - /usr/src/api/node_modules
+    env_file:
+      - ./.env
+    ports:
+      - "${PORT}:${PORT}"
+      # TODO: Consider exposing port 9229 and running start command with --inspect=0.0.0.0 flag in order to enable debugging
+      # - 9229:9229
+    command: npm start
+    environment:
+      WAIT_HOSTS: database:27017
+
+  database:
+    image: mongo
+    restart: always
+    env_file:
+      - ./.env
+    # TODO: Mapped volumes only work on Linux distributions, consider enabling
+    # volumes:
+    #   - ".${MONGO_DATA_DIR}:${MONGO_DATA_DIR}"
+    ports:
+      - 27017:27017
+    expose:
+      - 27017
+    # command: "mongod --smallfiles --logpath=${MONGO_LOG_FILE}"
