@@ -4,7 +4,7 @@
   "description": "A GraphQL API based on Apollo Server.",
   "main": "src/index.js",
   "scripts": {
-    "start": "nodemon -r dotenv/config src/index.js"
+    "start": "nodemon -L -r dotenv/config src/index.js"
   },
   "keywords": [],
   "author": "Alexander Zhelyazov",

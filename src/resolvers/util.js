@@ -19,16 +19,12 @@ const transformData = data => ({
  * @returns {Object}
  */
 const populateUser = async userId => {
-    try {
-        const user = await User.findById(userId);
-        return {
-            ...transformData(user),
-            // eslint-disable-next-line
-            entries: populateEntries.bind(this, user._doc.entries),
-        };
-    } catch (err) {
-        throw err;
-    }
+    const user = await User.findById(userId);
+    return {
+        ...transformData(user),
+        // eslint-disable-next-line
+        entries: populateEntries.bind(this, user._doc.entries),
+    };
 };
 
 /**
@@ -38,15 +34,11 @@ const populateUser = async userId => {
  * @returns {Object}
  */
 const populateEntries = async ids => {
-    try {
-        const entries = await Entry.find({ _id: { $in: ids } });
-        return entries.map(entry => ({
-            ...transformData(entry),
-            addedBy: populateUser.bind(this, entry.addedBy),
-        }));
-    } catch (err) {
-        throw err;
-    }
+    const entries = await Entry.find({ _id: { $in: ids } });
+    return entries.map(entry => ({
+        ...transformData(entry),
+        addedBy: populateUser.bind(this, entry.addedBy),
+    }));
 };
 
 exports.populateEntries = populateEntries;
