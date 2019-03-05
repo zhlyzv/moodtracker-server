@@ -17,7 +17,8 @@
     "isemail": "^3.2.0",
     "jsonwebtoken": "^8.5.0",
     "mongoose": "^5.4.13",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.18.10",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "eslint": "^5.14.1",
