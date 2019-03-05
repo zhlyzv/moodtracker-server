@@ -5,6 +5,14 @@ const { NotFoundError } = require('../../errorUtil');
 const User = require('../../models/user');
 
 module.exports = {
+    /**
+     * login - Issue user with JWT for login.
+     *
+     * @param {Object} root - the root GQL query
+     * @param {String} email - the user email
+     * @param {String} password - the user password
+     * @returns {Object}
+     */
     login: async (root, { email, password }) => {
         const user = await User.findOne({ email });
         // TODO: Obfuscate login errors for production
@@ -21,13 +29,12 @@ module.exports = {
                 email: user.email,
             },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' },
+            { expiresIn: process.env.JWT_TOKEN_EXPIRATION },
         );
         return {
             userId: user.id,
             token,
-            // TODO: consider making 'tokenExpiration' a string in .env
-            tokenExpiration: 1,
+            tokenExpiration: parseInt(process.env.JWT_TOKEN_EXPIRATION, 10),
         };
     },
 };
