@@ -47,5 +47,14 @@ module.exports = gql`
         note: String
     }
 
+    type Goal {
+        _id: ID!
+        description: String!
+        addedBy: User!
+        createdAt: Date
+        updatedAt: Date
+        due: Date!
+    }
+
     scalar Date
 `;
