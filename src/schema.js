@@ -50,7 +50,6 @@ module.exports = gql`
     type Goal {
         _id: ID!
         description: String!
-        foo: bar
         addedBy: User!
         createdAt: Date
         updatedAt: Date
