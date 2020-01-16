@@ -20,12 +20,9 @@ services:
     restart: always
     env_file:
       - ./.env
-    # TODO: Mapped volumes only work on Linux distributions, consider enabling
-    # volumes:
-    #   - ".${MONGO_DATA_DIR}:${MONGO_DATA_DIR}"
-    # volumes:
-    #   - ./mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
-    command: --smallfiles
+    volumes:
+      - ./data:${MONGO_DATA_DIR}
+      - ./mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
     ports:
       - 27017:27017
     expose:
